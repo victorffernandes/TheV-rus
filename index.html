@@ -1,0 +1,120 @@
+<HTML>
+<style type = "text/css">
+
+body{
+background-color:#000;
+}
+
+@font-face {
+    font-family:Liddie;
+    src: url('lr.ttf');
+}
+
+.canvas{
+background-color:#ffffff;
+}
+</style>
+<meta charset="UTF-8">
+	<body>
+	<center>
+	<canvas id='myCanvas' class='canvas'>
+	</canvas></center>
+<script src="Library Js/Images.js"></script>
+<script src="Library Js/Functions.js"></script>
+<script src="Library Js/Item.js"></script>
+<script src="Library Js/Button.js"></script>
+<script src="Library Js/Invetory.js"></script>
+<script src="Library Js/Player.js"></script>
+<script src="Library Js/Enemy.js"></script>
+<script src="Library Js/FadeObj.js"></script>
+<script src="Library Js/King.js"></script>
+<script src="Library Js/LoadMenu.js"></script>
+<script>
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+	canvas.setAttribute('width', '800');
+	canvas.setAttribute('height', '600'); 
+	canvas.setAttribute('style', 'border:1px solid #000000;');
+	function save(slot)
+	{
+		localStorage[slot] = JSON.stringify(KD);
+	}
+	var sprite = new Images();
+	var start = (new Date()).getTime();
+	var currentFrame=0;
+	var fps = 60;
+	var invDisplay = false;
+	var attackDisplay = false;
+	var avaibleStages = [];
+	var player = new Player();
+	var fade = new Fade(canvas,'black',7);
+	var enemy ;
+	var action = '';
+	var manager ={
+		actual:null,
+		last:null,
+			save:function()
+			{
+				manager.last = manager.actual;
+			},
+			restore:function(a)
+			{
+				//fade.begin();
+				manager.actual = manager.last;
+			},
+			go:function(a)
+			{
+				//fade.begin();
+				manager.actual = a;
+			}
+	}
+	var game = {
+	save:function(somewhere,K){
+	somewhere = K;
+	return somewhere;
+	}
+	}
+	
+	
+	function loop()
+	{
+		if(manager.actual != null ){
+		manager.actual.update();
+		manager.actual.draw();
+		}
+	}
+	
+	function deltaTime()
+	{
+		current = (new Date()).getTime();
+		elapsed = current - start;
+		start = current;
+		var delta = elapsed / 1000;
+		//console.log(delta);
+		return delta;
+	}
+	function updateFrame()
+	{
+		if(document.hasFocus())
+		{
+			currentFrame += deltaTime() * fps;
+			if(currentFrame>1)
+			{
+				loop();
+				currentFrame-=1;
+			}
+		}
+		else
+		deltaTime();
+		setTimeout(updateFrame, 0);
+	}
+	updateFrame();
+	
+</script>
+<script src="Library Js/Room.js"></script>
+<script src="Library Js/KingDoms.js"></script>
+<script src="Library Js/Map.js"></script>
+<script src="Library Js/Menu.js"></script>
+<script src="Library Js/CutScene.js"></script>
+</body>
+</HTML>
